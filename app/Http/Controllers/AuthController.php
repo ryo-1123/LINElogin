@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         try {
             $user = Socialite::driver('line')->user();
-         } catch (\Exception $e) {   // \を入力することでnamespaceの縛りがなくなり例外処理ができる。
+         } catch (Exception $e) {   // \を入力することでnamespaceの縛りがなくなり例外処理ができる。
             return redirect()->intended('/');
          }
         $authUser = $this->findOrCreateUser($user);
