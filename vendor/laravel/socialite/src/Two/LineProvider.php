@@ -9,13 +9,13 @@ class LineProvider extends AbstractProvider implements ProviderInterface
      *
      * @var array
      */
-    protected $scopes = [];
+    protected $scopes = ['profile'];
     /**
      * {@inheritdoc}
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase('https://access.line.me/dialog/oauth/weblogin', $state);
+        return $this->buildAuthUrlFromBase('https://access.line.me/oauth2/v2.1/authorize', $state);
     }
 
     /**
@@ -23,7 +23,7 @@ class LineProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return 'https://api.line.me/v2/oauth/accessToken';
+        return 'https://api.line.me/oauth2/v2.1/token';
     }
     
     /**
