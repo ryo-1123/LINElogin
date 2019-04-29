@@ -174,8 +174,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        Laravel\Socialite\SocialiteServiceProvider::class,
+        //LineRogin用Provider
+        App\Socialite\LineServiceProvider::class,
 
     ],
 
