@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Socialite;
+use Laravel\Socialite\Contracts\Factory as Socialite;
+
 class AuthController extends Controller
 {
     /**
@@ -10,9 +13,17 @@ class AuthController extends Controller
      *
      * @return Response
      */
+
+    protected $socialite;
+
+    public function __construct(Socialite $socialite)
+    {
+        $this->socialite = $socialite;
+    }
+    
     public function redirectToProvider()
     {
-        return Socialite::driver('line')->redirect();
+        return $this->socialite->driver('line')->redirect();
     }
     /**
      * Obtain the user information from LINE.
@@ -23,8 +34,8 @@ class AuthController extends Controller
     {
 
         try {
-            $user = Socialite::driver('line')->user();
-         } catch (\Exception $e) {   // \を入力することでnamespaceの縛りがなくなり例外処理ができる。
+            $user = $this->socialite->driver('line')->user();
+         } catch (Exception $e) {   // \を入力することでnamespaceの縛りがなくなり例外処理ができる。
             return redirect()->intended('/');
          }
         $authUser = $this->findOrCreateUser($user);
@@ -49,13 +60,13 @@ class AuthController extends Controller
      */
     private function findOrCreateUser($user)
     {
-        if ($authUser = \App\User::where('mid', $user->id)->first()) {
+        if ($authUser = \App\User::where('line_id', $user->line_id)->first()) {
             return $authUser;
         }
         return \App\User::create([
-            'mid' => $user->id,
-            'name' => $user->name,
-            'avatar' => $user->avatar
+            'line_id' => $user->id,
+            'user_name' => $user->name,
+            'user_image' => $user->avatar
         ]);
     }
 }
